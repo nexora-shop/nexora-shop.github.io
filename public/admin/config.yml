@@ -1,18 +1,59 @@
 backend:
   name: git-gateway
   branch: main
+
 media_folder: public/uploads
 public_folder: /uploads
+
+publish_mode: simple
+
 collections:
   - name: products
     label: Products
+    label_singular: Product
     folder: content/products
     create: true
+    delete: true
     slug: "{{slug}}"
+    format: frontmatter
+    editor:
+      preview: false
     fields:
       - {label: Product Name, name: title, widget: string}
       - {label: Main Image, name: image, widget: image}
-      - {label: Category, name: category, widget: string}
+      - label: Additional Images
+        name: images
+        widget: list
+        required: false
+        max: 5
+        field:
+          label: Image
+          name: image
+          widget: image
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - Electronics
+          - Computers & Accessories
+          - Audio
+          - Cameras
+          - Fashion
+          - Shoes
+          - Beauty
+          - Home & Kitchen
+          - Furniture & Decor
+          - Sports & Fitness
+          - Gaming
+          - Books
+          - Toys & Kids
+          - Automotive
+          - Pet Supplies
+          - Garden & Outdoor
+          - Travel
+          - Jewelry & Accessories
+          - Tools & DIY
+          - Gifts & More
       - {label: Subcategory, name: subcategory, widget: string}
       - {label: Short Description, name: description, widget: text}
       - {label: Affiliate Link, name: affiliate, widget: string}

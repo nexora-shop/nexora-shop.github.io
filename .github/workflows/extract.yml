@@ -17,39 +17,53 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check ZIP
+      - name: Verify ZIP exists
         run: |
-          test -f nexora-professional-fixed-static-export.zip
+          if [ ! -f "nexora-professional-fixed-static-export.zip" ]; then
+            echo "ERROR: ZIP file not found."
+            exit 1
+          fi
 
       - name: Extract ZIP
         run: |
           rm -rf /tmp/nexora
           mkdir -p /tmp/nexora
 
-          unzip -o nexora-professional-fixed-static-export.zip -d /tmp/nexora
+          unzip -q -o "nexora-professional-fixed-static-export.zip" -d /tmp/nexora
 
-          if [ -d "/tmp/nexora/nexora-final" ]; then
-            cp -a /tmp/nexora/nexora-final/app ./
-            cp -a /tmp/nexora/nexora-final/content ./
-            cp -a /tmp/nexora/nexora-final/lib ./
-            cp -a /tmp/nexora/nexora-final/public ./
-            cp -a /tmp/nexora/nexora-final/package.json ./
-            cp -a /tmp/nexora/nexora-final/tsconfig.json ./
-            cp -a /tmp/nexora/nexora-final/next-env.d.ts ./
-            cp -a /tmp/nexora/nexora-final/next.config.mjs ./
-            cp -a /tmp/nexora/nexora-final/netlify.toml ./
-            cp -a /tmp/nexora/nexora-final/README.md ./
-            cp -a /tmp/nexora/nexora-final/SECURITY.md ./
-            cp -a /tmp/nexora/nexora-final/.env.example ./
-          else
-            echo "Unexpected ZIP structure"
+          ROOT="/tmp/nexora/nexora-final"
+
+          if [ ! -d "$ROOT" ]; then
+            echo "ERROR: nexora-final folder not found inside ZIP."
             exit 1
           fi
 
-      - name: Remove ZIP
-        run: rm -f nexora-professional-fixed-static-export.zip
+          echo "Nexora package found."
+          echo "Copying project files..."
 
-      - name: Commit Nexora files
+          mkdir -p app content lib public
+
+          cp -a "$ROOT/app/." app/
+          cp -a "$ROOT/content/." content/
+          cp -a "$ROOT/lib/." lib/
+          cp -a "$ROOT/public/." public/
+
+          cp -f "$ROOT/package.json" .
+          cp -f "$ROOT/tsconfig.json" .
+          cp -f "$ROOT/next-env.d.ts" .
+          cp -f "$ROOT/next.config.mjs" .
+          cp -f "$ROOT/netlify.toml" .
+          cp -f "$ROOT/README.md" .
+          cp -f "$ROOT/SECURITY.md" .
+          cp -f "$ROOT/.env.example" .
+
+          echo "Extraction completed successfully."
+
+      - name: Remove uploaded ZIP
+        run: |
+          rm -f "nexora-professional-fixed-static-export.zip"
+
+      - name: Commit extracted project
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -57,8 +71,9 @@ jobs:
           git add -A
 
           if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "Install final Nexora project"
-            git push
+            echo "No changes detected."
+            exit 0
           fi
+
+          git commit -m "Install final Nexora project"
+          git push

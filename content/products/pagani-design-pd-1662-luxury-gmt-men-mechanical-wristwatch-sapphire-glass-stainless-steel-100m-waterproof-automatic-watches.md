@@ -9,7 +9,7 @@ images:
   - /uploads/1000164071.jpg
   - /uploads/1000164069.jpg
 category: Fashion
-subcategory: "Watches "
+subcategory: men
 description: "\n\n"
 affiliate: https://s.click.aliexpress.com/e/_c3EPxHOH
 ---

@@ -55,7 +55,6 @@ jobs:
           cp -f "$ROOT/netlify.toml" .
           cp -f "$ROOT/README.md" .
           cp -f "$ROOT/SECURITY.md" .
-          cp -f "$ROOT/.env.example" .
 
           echo "Extraction completed successfully."
 

@@ -12,9 +12,7 @@ collections:
     fields:
       - {label: Product Name, name: title, widget: string}
       - {label: Main Image, name: image, widget: image}
-      - {label: Additional Images, name: images, widget: list, required: false, max: 5}
       - {label: Category, name: category, widget: string}
-      - {label: Subcategory, name: subcategory, widget: string, required: false}
+      - {label: Subcategory, name: subcategory, widget: string}
       - {label: Short Description, name: description, widget: text}
-      - {label: Affiliate Link, name: affiliate_link, widget: string}
-      - {label: Publish, name: published, widget: boolean, default: true}
+      - {label: Affiliate Link, name: affiliate, widget: string}

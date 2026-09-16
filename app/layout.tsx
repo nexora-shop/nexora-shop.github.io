@@ -1,1 +1,11 @@
-import "./globals.css"; export const metadata={title:"Nexora — Discover Better Products",description:"A clean global product discovery marketplace."}; export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body>{children}</body></html>}
+import "./globals.css";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nexora — Discover Better Products",
+  description: "Nexora is a global product discovery platform featuring curated products across multiple categories.",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="en"><body>{children}</body></html>;
+}

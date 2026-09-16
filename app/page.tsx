@@ -1,4 +1,23 @@
+'use client';
+import {useMemo,useState} from "react";
 import Link from "next/link";
-const products=[["n1","Wireless Noise-Cancelling Headphones","Audio","https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80"],["n2","Minimal Desk Lamp","Home & Kitchen","https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80"],["n3","Smart Travel Backpack","Travel","https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80"],["n4","Mechanical Gaming Keyboard","Gaming","https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=700&q=80"],["n5","Everyday Running Shoes","Shoes","https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"],["n6","Compact Digital Camera","Cameras","https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=700&q=80"],["n7","Modern Home Decor Vase","Furniture & Decor","https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=700&q=80"],["n8","Fitness Smart Watch","Sports & Fitness","https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80"]];
-const cats=["Electronics","Computers & Accessories","Audio","Cameras","Fashion","Shoes","Beauty","Home & Kitchen","Furniture & Decor","Sports & Fitness","Gaming","Books","Toys & Kids","Automotive","Pet Supplies","Garden & Outdoor","Travel","Jewelry & Accessories","Tools & DIY","Gifts & More"];
-export default function Home(){return <main><header><div className="nav"><Link className="brand" href="/">NEXORA<span>•</span></Link><div className="search">⌕<input placeholder="Search products..."/><button>Search</button></div><button className="cat">Categories⌄</button></div></header><section className="hero"><p>DISCOVER • COMPARE • EXPLORE</p><h1>Find products worth<br/><i>discovering.</i></h1><div>A clean global marketplace for discovering useful products across everyday categories.</div></section><section className="section"><div className="head"><div><p>FRESH PICKS</p><h2>Latest Products</h2></div><small>8 products</small></div><div className="grid">{products.map(p=><Link className="card" href={"/product/"+p[0]} key={p[0]}><div className="pic"><img src={p[3]} alt={p[1]}/></div><div className="txt"><small>{p[2]}</small><h3>{p[1]}</h3></div></Link>)}</div></section><section className="section cats"><div className="head"><div><p>SHOP BY INTEREST</p><h2>Categories</h2></div></div><div className="catgrid">{cats.map(c=><button key={c}>{c}<span>→</span></button>)}</div></section><footer><b>NEXORA<span>•</span></b><span>Affiliate Disclosure · Privacy · Terms</span><small>© 2026 Nexora</small></footer></main>}
+import {products,categories} from "./data";
+
+export default function Home(){
+ const [q,setQ]=useState(""); const [open,setOpen]=useState(false); const [expanded,setExpanded]=useState<string|null>(null);
+ const filtered=useMemo(()=>products.filter(p=>(p.name+" "+p.category+" "+p.subcategory).toLowerCase().includes(q.toLowerCase())),[q]);
+ return <div className="site">
+  <header className="header"><div className="nav">
+   <Link href="/" className="brand">Nex<span>ora</span></Link>
+   <div className="search"><input aria-label="Search products" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search products..." /><button onClick={()=>{}}>Search</button></div>
+   <button className="catbtn" onClick={()=>setOpen(true)}>Categories</button>
+  </div></header>
+  <main className="main">
+   <section className="intro"><div className="eyebrow">Discover • Explore • Compare</div><h1>Products worth discovering</h1><p>Curated product ideas from across the world.</p></section>
+   <div className="sectionhead"><h2>{q ? "Search results" : "Latest Products"}</h2><span className="count">{filtered.length} products</span></div>
+   {filtered.length?<div className="grid">{filtered.map(p=><Link className="card" href={`/product/${p.id}/`} key={p.id}><div className="pic"><img src={p.image} alt={p.name}/></div><div className="cardbody"><div className="tag">{p.category}</div><h3>{p.name}</h3></div></Link>)}</div>:<div className="empty">No products found.</div>}
+  </main>
+  <footer className="footer">Nexora is an affiliate product discovery platform. Product links may lead to external stores. We do not process orders or payments.</footer>
+  {open&&<div className="drawer" onClick={()=>setOpen(false)}><aside className="drawerpanel" onClick={e=>e.stopPropagation()}><div className="drawerhead"><h2>Categories</h2><button className="close" onClick={()=>setOpen(false)}>Close</button></div>{categories.map(c=><div className="category" key={c[0]}><button onClick={()=>setExpanded(expanded===c[0]?null:c[0])}>{c[0]}<span>{expanded===c[0]?"−":"+"}</span></button>{expanded===c[0]&&<div className="subs">{c.slice(1).map(s=><Link key={s} href={`/?q=${encodeURIComponent(s)}`} onClick={()=>setOpen(false)}>{s}</Link>)}</div>}</div>)}</aside></div>}
+ </div>
+}

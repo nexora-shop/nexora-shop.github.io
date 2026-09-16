@@ -1,12 +1,4 @@
-import Link from "next/link";
-import {products} from "../../data";
-export function generateStaticParams(){return products.map(p=>({id:p.id}));}
-export default async function ProductPage({params}:{params:Promise<{id:string}>}){
- const {id}=await params; const p=products.find(x=>x.id===id);
- if(!p) return <main className="detail"><Link className="back" href="/">← Back to Nexora</Link><h1>Product not found</h1></main>;
- return <div className="site"><main className="detail">
-  <Link className="back" href="/">← Back to Nexora</Link>
-  <div className="detailgrid"><div><div className="heroimg"><img src={p.image} alt={p.name}/></div><div className="thumbs">{p.images.slice(0,6).map((im,i)=><img key={i} src={im} alt={`${p.name} image ${i+1}`}/>)}</div></div>
-  <div><div className="tag">{p.category} · {p.subcategory}</div><h1>{p.name}</h1><p className="desc">{p.description}</p><a className="cta" href={p.affiliate} target="_blank" rel="nofollow sponsored noopener">View Product</a><div className="note">Nexora is an affiliate platform. You will continue to the external store to view the product. Nexora does not handle checkout, payment, shipping or orders.</div></div></div>
- </main><footer className="footer">Product information and availability are provided by the external store and may change.</footer></div>;
-}
+import type {Metadata} from "next"; import Link from "next/link"; import {notFound} from "next/navigation"; import {getProduct,getProducts} from "../../../lib/catalog"; import {Header,Footer,ProductCard} from "../../components";
+export function generateStaticParams(){return getProducts().map(p=>({id:p.slug}))}
+export async function generateMetadata({params}:{params:Promise<{id:string}>}):Promise<Metadata>{const {id}=await params,p=getProduct(id);return p?{title:p.seoTitle||p.title,description:p.seoDescription||p.description.slice(0,155)}:{}}
+export default async function ProductPage({params}:{params:Promise<{id:string}>}){const {id}=await params,p=getProduct(id);if(!p)notFound();const related=getProducts().filter(x=>x.slug!==p!.slug&&x.category===p!.category).slice(0,4),gallery=[p!.image,...p!.images].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).slice(0,6);return <><Header/><main className="container detail"><Link className="back" href="/">← Back</Link><div className="detail-grid"><div className="gallery">{gallery.map((src,i)=><img key={`${src}-${i}`} src={src} alt={i===0?p!.title:""} className={i===0?"main-photo":"thumb-photo"} loading={i===0?"eager":"lazy"}/>)}</div><div className="detail-copy"><p className="eyebrow">{p!.category}{p!.subcategory?` · ${p!.subcategory}`:""}</p><h1>{p!.title}</h1><p className="description">{p!.description}</p>{p!.highlights.length>0&&<ul className="highlights">{p!.highlights.map(h=><li key={h}>{h}</li>)}</ul>}<a className="cta" href={p!.affiliateUrl} target="_blank" rel="sponsored nofollow noopener noreferrer">View Product</a><p className="affiliate-note">Nexora may earn a commission when you use an affiliate link. We do not process the purchase or payment.</p></div></div>{related.length>0&&<section className="related"><div className="section-head"><h2>Related Products</h2></div><div className="product-grid">{related.map(x=><ProductCard key={x.slug} product={x}/>)}</div></section>}</main><Footer/></>}

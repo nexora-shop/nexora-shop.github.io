@@ -1,23 +1,19 @@
 backend:
   name: git-gateway
   branch: main
-
-media_folder: public/uploads
-public_folder: /uploads
-
-publish_mode: simple
-
+media_folder: "public/uploads"
+public_folder: "/uploads"
+publish_mode: editorial_workflow
+site_url: https://nexora1998.netlify.app
+display_url: https://nexora1998.netlify.app
 collections:
   - name: products
     label: Products
-    label_singular: Product
     folder: content/products
     create: true
-    delete: true
     slug: "{{slug}}"
+    extension: md
     format: frontmatter
-    editor:
-      preview: false
     fields:
       - {label: Product Name, name: title, widget: string}
       - {label: Main Image, name: image, widget: image}
@@ -26,34 +22,21 @@ collections:
         widget: list
         required: false
         max: 5
-        field:
-          label: Image
-          name: image
-          widget: image
+        field: {label: Image, name: image, widget: image}
       - label: Category
         name: category
         widget: select
-        options:
-          - Electronics
-          - Computers & Accessories
-          - Audio
-          - Cameras
-          - Fashion
-          - Shoes
-          - Beauty
-          - Home & Kitchen
-          - Furniture & Decor
-          - Sports & Fitness
-          - Gaming
-          - Books
-          - Toys & Kids
-          - Automotive
-          - Pet Supplies
-          - Garden & Outdoor
-          - Travel
-          - Jewelry & Accessories
-          - Tools & DIY
-          - Gifts & More
-      - {label: Subcategory, name: subcategory, widget: string}
-      - {label: Short Description, name: description, widget: text}
-      - {label: Affiliate Link, name: affiliate, widget: string}
+        options: [Electronics, Computers & Accessories, Audio, Cameras, Fashion, Shoes, Beauty, Home & Kitchen, Furniture & Decor, Sports & Fitness, Gaming, Books, Toys & Kids, Automotive, Pet Supplies, Garden & Outdoor, Travel, Jewelry & Accessories, Tools & DIY, Gifts & More]
+      - {label: Subcategory, name: subcategory, widget: string, required: false}
+      - {label: Short Description, name: body, widget: markdown}
+      - label: Highlights
+        name: highlights
+        widget: list
+        required: false
+        max: 6
+        field: {label: Highlight, name: highlight, widget: string}
+      - {label: Affiliate Link, name: affiliateUrl, widget: string}
+      - {label: Published Date, name: publishedAt, widget: datetime, required: false}
+      - {label: SEO Title, name: seoTitle, widget: string, required: false}
+      - {label: SEO Description, name: seoDescription, widget: text, required: false}
+      - {label: Status, name: status, widget: select, default: published, options: [published, draft]}

@@ -1,13 +1,9 @@
-# Nexora
+# Nexora Final
 
-Nexora is a global affiliate product discovery platform.
+Final mobile-first affiliate product discovery foundation.
 
-## Product management
+## Publishing
+Use `/admin/` with Netlify Identity + Git Gateway enabled. Create a product, add images, category, description and affiliate URL, then publish. The CMS writes Markdown content to `content/products`; Netlify rebuilds the public site.
 
-Open `/admin/` on the deployed site to use Decap CMS.
-
-Products are stored as Markdown files in `content/products/`. During the Netlify build, the content is converted into the product catalog automatically.
-
-## CMS authentication
-
-The current CMS configuration uses Netlify Identity + Git Gateway for the simplest no-code publishing flow. Netlify currently marks Git Gateway as deprecated, so this should be treated as a compatibility setup rather than a new long-term dependency.
+## Included
+Storefront, CMS, product pages, categories, search, legal pages, affiliate disclosure, SEO sitemap/robots, security headers, responsive UI, and GitHub extraction workflow.

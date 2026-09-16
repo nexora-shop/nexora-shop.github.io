@@ -1,40 +1,51 @@
-name: Extract Nexora Mobile Polished ZIP
+name: Extract Nexora Final ZIP
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - "nexora-mobile-polished.zip"
+      - "nexora-professional-fixed-static-export.zip"
 
 permissions:
   contents: write
 
 jobs:
   extract:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract ZIP
+      - name: Extract Nexora ZIP
         run: |
+          rm -rf /tmp/nexora
           mkdir -p /tmp/nexora
-          unzip -o nexora-mobile-polished.zip -d /tmp/nexora
 
-          cp -r /tmp/nexora/* ./
+          unzip -o nexora-professional-fixed-static-export.zip -d /tmp/nexora
 
-          if [ -d "/tmp/nexora/nexora-mobile-polished" ]; then
-            cp -r /tmp/nexora/nexora-mobile-polished/* ./
+          if [ -d "/tmp/nexora/nexora-final" ]; then
+            cp -a /tmp/nexora/nexora-final/. ./
+          else
+            cp -a /tmp/nexora/. ./
           fi
 
       - name: Remove ZIP
-        run: rm -f nexora-mobile-polished.zip
+        run: |
+          rm -f nexora-professional-fixed-static-export.zip
 
       - name: Commit extracted files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .
-          git diff --cached --quiet || git commit -m "Extract Nexora mobile polished project"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Install final Nexora project"
           git push

@@ -2,98 +2,13 @@ import Link from "next/link";
 
 export function generateStaticParams() {
   return [
-    { id: "1" },
-    { id: "2" },
-    { id: "3" },
-    { id: "4" },
-    { id: "5" },
-    { id: "6" },
-    { id: "7" },
-    { id: "8" },
-    { id: "9" },
-    { id: "10" },
+    { id: "n1" },
+    { id: "n2" },
+    { id: "n3" },
+    { id: "n4" },
+    { id: "n5" },
+    { id: "n6" },
+    { id: "n7" },
+    { id: "n8" },
   ];
-}
-
-const imgs = [
-  "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
-  "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-  "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-  "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f",
-  "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
-  "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d",
-];
-
-export default function ProductPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const id = Number(params.id);
-  const image = imgs[(id - 1) % imgs.length];
-
-  return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <header className="border-b border-slate-800 bg-slate-950">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <Link href="/" className="text-2xl font-bold text-blue-400">
-            Nexora
-          </Link>
-
-          <Link
-            href="/"
-            className="text-sm text-slate-300 hover:text-white"
-          >
-            Home
-          </Link>
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-5xl px-4 py-8">
-        <Link
-          href="/"
-          className="mb-6 inline-block text-sm text-blue-400"
-        >
-          ← Back to Products
-        </Link>
-
-        <section className="grid gap-8 rounded-2xl border border-slate-800 bg-slate-900 p-5 md:grid-cols-2">
-          <div>
-            <img
-              src={`${image}?auto=format&fit=crop&w=1000&q=80`}
-              alt="Nexora product"
-              className="w-full rounded-xl object-cover"
-            />
-          </div>
-
-          <div className="flex flex-col justify-center">
-            <p className="mb-2 text-sm text-blue-400">
-              Nexora Product
-            </p>
-
-            <h1 className="text-3xl font-bold">
-              Featured Product {params.id}
-            </h1>
-
-            <p className="mt-5 leading-7 text-slate-300">
-              Discover useful products selected for the Nexora
-              product discovery platform.
-            </p>
-
-            <a
-              href="#"
-              className="mt-7 inline-flex w-fit rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white"
-            >
-              View Product
-            </a>
-
-            <p className="mt-6 text-xs leading-5 text-slate-500">
-              Nexora may earn a commission from qualifying purchases
-              made through affiliate links.
-            </p>
-          </div>
-        </section>
-      </div>
-    </main>
-  );
-}
+} const imgs=["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=85","https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=700&q=80","https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=700&q=80","https://images.unsplash.com/photo-1487215078519-e21cc028cb29?auto=format&fit=crop&w=700&q=80","https://images.unsplash.com/photo-1545127398-14699f92334b?auto=format&fit=crop&w=700&q=80","https://images.unsplash.com/photo-1577174881658-0f30ed549adc?auto=format&fit=crop&w=700&q=80"]; export default function Page(){return <main><header><div className="nav"><Link className="brand" href="/">NEXORA<span>•</span></Link><div className="search">⌕<input placeholder="Search products..."/><button>Search</button></div><Link className="back" href="/">← Home</Link></div></header><div className="detail"><div><div className="mainpic"><img src={imgs[0]} alt="Wireless Noise-Cancelling Headphones"/></div><div className="thumbs">{imgs.slice(1).map((x,i)=><img key={x} src={x} alt={"Product image "+(i+2)}/>)}</div></div><div className="info"><p>AUDIO</p><h1>Wireless Noise-Cancelling Headphones</h1><div className="desc">A clean product-detail layout for concise product discovery. Check the external store for current product information, availability and purchasing options.</div><a className="cta" href="#" rel="nofollow">Check Product ↗</a><small>You will be redirected to the external affiliate store.</small></div></div><div className="disclosure"><b>Affiliate disclosure</b><br/>Nexora may earn a commission when you follow an affiliate link and make a qualifying purchase.</div></main>}

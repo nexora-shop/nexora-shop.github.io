@@ -11,14 +11,17 @@ permissions:
 
 jobs:
   extract:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract Nexora ZIP
+      - name: Check ZIP
+        run: |
+          test -f nexora-professional-fixed-static-export.zip
+
+      - name: Extract ZIP
         run: |
           rm -rf /tmp/nexora
           mkdir -p /tmp/nexora
@@ -26,16 +29,27 @@ jobs:
           unzip -o nexora-professional-fixed-static-export.zip -d /tmp/nexora
 
           if [ -d "/tmp/nexora/nexora-final" ]; then
-            cp -a /tmp/nexora/nexora-final/. ./
+            cp -a /tmp/nexora/nexora-final/app ./
+            cp -a /tmp/nexora/nexora-final/content ./
+            cp -a /tmp/nexora/nexora-final/lib ./
+            cp -a /tmp/nexora/nexora-final/public ./
+            cp -a /tmp/nexora/nexora-final/package.json ./
+            cp -a /tmp/nexora/nexora-final/tsconfig.json ./
+            cp -a /tmp/nexora/nexora-final/next-env.d.ts ./
+            cp -a /tmp/nexora/nexora-final/next.config.mjs ./
+            cp -a /tmp/nexora/nexora-final/netlify.toml ./
+            cp -a /tmp/nexora/nexora-final/README.md ./
+            cp -a /tmp/nexora/nexora-final/SECURITY.md ./
+            cp -a /tmp/nexora/nexora-final/.env.example ./
           else
-            cp -a /tmp/nexora/. ./
+            echo "Unexpected ZIP structure"
+            exit 1
           fi
 
       - name: Remove ZIP
-        run: |
-          rm -f nexora-professional-fixed-static-export.zip
+        run: rm -f nexora-professional-fixed-static-export.zip
 
-      - name: Commit extracted files
+      - name: Commit Nexora files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -44,8 +58,7 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
-            exit 0
+          else
+            git commit -m "Install final Nexora project"
+            git push
           fi
-
-          git commit -m "Install final Nexora project"
-          git push

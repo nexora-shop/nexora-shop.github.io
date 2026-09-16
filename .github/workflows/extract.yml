@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "nexora-mobile-polished.zip"
+      - "nexora-mobile-polished1.zip"
 
 permissions:
   contents: write

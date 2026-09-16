@@ -1,10 +1,10 @@
-name: Extract Nexora Fixed ZIP
+name: Extract Nexora Mobile Polished ZIP
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - "nexora-professional-fixed-static-export.zip"
+      - "nexora-mobile-polished.zip"
 
 permissions:
   contents: write
@@ -20,21 +20,21 @@ jobs:
       - name: Extract ZIP
         run: |
           mkdir -p /tmp/nexora
-          unzip -o nexora-professional-fixed-static-export.zip -d /tmp/nexora
+          unzip -o nexora-mobile-polished.zip -d /tmp/nexora
 
           cp -r /tmp/nexora/* ./
 
-          if [ -d "/tmp/nexora/nexora-professional-fixed-static-export" ]; then
-            cp -r /tmp/nexora/nexora-professional-fixed-static-export/* ./
+          if [ -d "/tmp/nexora/nexora-mobile-polished" ]; then
+            cp -r /tmp/nexora/nexora-mobile-polished/* ./
           fi
 
       - name: Remove ZIP
-        run: rm -f nexora-professional-fixed-static-export.zip
+        run: rm -f nexora-mobile-polished.zip
 
       - name: Commit extracted files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff --cached --quiet || git commit -m "Extract fixed Nexora project files"
+          git diff --cached --quiet || git commit -m "Extract Nexora mobile polished project"
           git push
